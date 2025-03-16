@@ -48,6 +48,7 @@ def login(store_json):
 
 
 def start_dialog(stores):
+    _logger.log('Dialog mode')
     while(True):
         i = input('Action (clipCoupons / summarize): ')
         if i.__contains__('clip'):
@@ -70,6 +71,7 @@ def start_dialog(stores):
             print('Invalid.')
 
 def start_automated(stores):
+    _logger.log('Automated mode')
     for store in stores:
         store.clip(store.get_available_coupons())
 
