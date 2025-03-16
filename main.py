@@ -2,10 +2,13 @@ import json
 import re
 import os
 import requests
+from logger import Logger as StoreLogger
 from pprint import pprint
 
 from objects.store import Store
 
+
+_logger = StoreLogger()
 
 class CouponStatus:
     AVAILABLE = 'Available'
@@ -36,6 +39,7 @@ def extract_store_id_and_token(url):
     os.remove('app.js')
 
     if match:
+        _logger.log(f'Successfully extracted token from {url}')
         return match.group(1), match.group(2)  # Extract and return both values
     return None, None  # No match found
 
@@ -48,8 +52,28 @@ def login(store_json):
 
 
 if __name__ == '__main__':
+    _logger.log('Started program')
     stores = load_store_info()
 
-    for store in stores:
-        coupons = store.get_available_coupons()
-        store.get_coupon_summary()
+    while(True):
+        i = input('Action (clipCoupons / summarize): ')
+        if i.__contains__('clip'):
+            for store in stores:
+                store.clip(store.get_available_coupons())
+        elif i == 'summarize':
+            for store in stores:
+                store.try_get_all_coupons()
+                store.get_coupon_summary()
+        elif i == 'details':
+            for store in stores:
+                for coupon in store.get_available_coupons():
+                    print(f'Brand: {coupon.brand_name}')
+                    print(f'Description: {coupon.offer_description}')
+                    print(f'Value: {coupon.offer_value}')
+        elif i == 'reload':
+            stores = load_store_info()
+        elif i == 'exit':
+            exit()
+        else:
+            print('Invalid.')
+

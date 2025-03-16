@@ -40,6 +40,8 @@ class Coupon:
     @staticmethod
     def parse_items(items):
         products = []
+        if not items:
+            return
         for item in items:
             products.append(Product(item))
         return products
