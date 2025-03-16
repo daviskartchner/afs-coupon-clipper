@@ -61,6 +61,7 @@ class Store:
 
     def clip(self, coupons):
         if len(coupons) == 0:
+            self._logger.log('No coupons available to clip')
             return
 
         body = generate_payload(coupons)
