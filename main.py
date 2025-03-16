@@ -1,9 +1,5 @@
-import json
-import re
-import os
-import requests
+import json, re, os, requests, sys
 from logger import Logger as StoreLogger
-from pprint import pprint
 
 from objects.store import Store
 
@@ -51,10 +47,7 @@ def login(store_json):
     return Store(name=name, store_id=store_id, login_token=login_token)
 
 
-if __name__ == '__main__':
-    _logger.log('Started program')
-    stores = load_store_info()
-
+def start_dialog(stores):
     while(True):
         i = input('Action (clipCoupons / summarize): ')
         if i.__contains__('clip'):
@@ -63,7 +56,6 @@ if __name__ == '__main__':
         elif i == 'summarize':
             for store in stores:
                 store.try_get_all_coupons()
-                store.get_coupon_summary()
         elif i == 'details':
             for store in stores:
                 for coupon in store.get_available_coupons():
@@ -76,4 +68,19 @@ if __name__ == '__main__':
             exit()
         else:
             print('Invalid.')
+
+def start_automated(stores):
+    for store in stores:
+        store.clip(store.get_available_coupons())
+
+
+if __name__ == '__main__':
+    _logger.log('Started program')
+    stores = load_store_info()
+
+    if len(sys.argv) == 1:
+        start_dialog(stores)
+    else:
+        start_automated(stores)
+
 
