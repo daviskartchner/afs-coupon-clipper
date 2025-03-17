@@ -3,8 +3,8 @@ from logger import Logger as StoreLogger
 
 from objects.store import Store
 
-
 _logger = StoreLogger()
+
 
 class CouponStatus:
     AVAILABLE = 'Available'
@@ -43,13 +43,14 @@ def extract_store_id_and_token(url):
 def login(store_json):
     name = store_json['StoreName']
     app_url = store_json['app.js']
-    store_id, login_token = extract_store_id_and_token(store_json['app.js'])
+    store_id, login_token = extract_store_id_and_token(app_url)
     return Store(name=name, store_id=store_id, login_token=login_token)
 
 
-def start_dialog(stores):
-    _logger.log('Dialog mode')
-    while(True):
+def start_dialog():
+    stores = load_store_info()
+
+    while (True):
         i = input('Action (clipCoupons / summarize): ')
         if i.__contains__('clip'):
             for store in stores:
@@ -70,19 +71,16 @@ def start_dialog(stores):
         else:
             print('Invalid.')
 
-def start_automated(stores):
-    _logger.log('Automated mode')
-    for store in stores:
+
+def start_automated():
+    for store in load_store_info():
         store.clip(store.get_available_coupons())
 
 
 if __name__ == '__main__':
-    _logger.log('Started program')
-    stores = load_store_info()
-
     if len(sys.argv) == 1:
-        start_dialog(stores)
+        _logger.log('Started program in dialog mode')
+        start_dialog()
     else:
-        start_automated(stores)
-
-
+        _logger.log('Started program in automated mode')
+        start_automated()
