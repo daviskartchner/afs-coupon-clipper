@@ -69,6 +69,7 @@ class Store:
         res = requests.post(self.base_url + '/activate', json=body, headers=self.headers)
         self._logger.log('Response code: {0}'.format(res.status_code))
         if res.status_code <= 299 and 'failure' not in res.json().keys():
+            self._logger.log(f'Clipped {len(self.available_coupons)} coupons')
             if type(coupons) == type(list()):
                 for coupon in coupons:
                     coupon.clipped = True
