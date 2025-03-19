@@ -1,9 +1,11 @@
+import os
 from datetime import datetime
 
 
 class Logger:
     def __init__(self, prefix=None):
-        now = datetime.utcnow()
+        if not os.path.exists('logs'):
+            os.mkdir('logs')
         self.prefix = prefix
 
     def log(self, value, **kwargs):
@@ -18,7 +20,7 @@ class Logger:
     @staticmethod
     def _write_log(log_value):
         now = datetime.utcnow()
-        with open('coupon_clipper_log_{0}'.format(now.strftime('%Y_%m')), 'a') as file:
+        with open('logs/logfile_{0}.log'.format(now.strftime('%Y_%m')), 'a+') as file:
             file.write(log_value)
             file.write('\n')
             file.close()

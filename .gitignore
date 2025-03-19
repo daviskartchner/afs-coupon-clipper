@@ -1,4 +1,5 @@
 /.login_settings
 /.store_settings
-coupon_clipper_log_*
+log*.log
+logs
 *.pyc

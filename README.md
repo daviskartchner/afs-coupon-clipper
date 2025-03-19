@@ -14,6 +14,8 @@ Create the following in the same directory as main.py
   }]`
 - .login_settings
   - Create with the following data structure:  
-    - `{"emailOrPhone":"value","password":"value"}`
-
+    - `{
+    "emailOrPhone": "value", 
+    "password": "value"
+    }`
 
