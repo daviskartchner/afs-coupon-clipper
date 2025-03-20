@@ -1,16 +1,18 @@
 import os
 from datetime import datetime
-
+from zoneinfo import ZoneInfo
 
 class Logger:
-    def __init__(self, prefix=None):
+    def __init__(self, prefix=None, iana_name = 'America/Denver'):
         if not os.path.exists('logs'):
             os.mkdir('logs')
+
+        self.timezone = ZoneInfo(iana_name)
         self.prefix = prefix
 
     def log(self, value, **kwargs):
-        now = datetime.utcnow()
-        log_value = f'{now.isoformat()} | {self.prefix + ": " if self.prefix else ""}{value}'
+        now_local = datetime.now().astimezone(self.timezone)
+        log_value = f'{now_local.strftime("%Y-%m-%d %H:%M:%S")} | {self.prefix + ": " if self.prefix else ""}{value}'
         if kwargs:
             log_value.format(kwargs)
 
