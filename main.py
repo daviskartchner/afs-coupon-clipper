@@ -64,6 +64,12 @@ def start_dialog():
                     print(f'Brand: {coupon.brand_name}')
                     print(f'Description: {coupon.offer_description}')
                     print(f'Value: {coupon.offer_value}')
+        elif i == 'used':
+            for store in stores:
+                for coupon in store.get_redeemed_coupons():
+                    print(f'Brand: {coupon.brand_name}')
+                    print(f'Description: {coupon.offer_description}')
+                    print(f'Value: {coupon.offer_value}')
         elif i == 'reload':
             stores = load_store_info()
         elif i == 'exit':
